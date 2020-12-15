@@ -1,6 +1,6 @@
 # this is an example for cortex release 0.19 and may not deploy correctly on other releases of cortex
 
-- name: gpt2-124m-test
+- name: gpt2-774m-pulitzer
   kind: RealtimeAPI
   predictor:
     type: python

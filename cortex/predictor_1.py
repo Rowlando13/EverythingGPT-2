@@ -1,10 +1,12 @@
 # cortex version 0.19 and may not deploy correctly on other releases of cortex
 import torch
 import boto3
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import nltk
 import os
 import json
+import onnxruntime as rt
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
 import cstm_generate
 
 def s3_download(cortex_base, modelpath, s3bucket, s3):
@@ -75,9 +77,9 @@ class PythonPredictor:
         aws_access_key_id="null"
         aws_secret_access_key="null"
         cortex_base1="tokenizer"
-        modelpath1='gpt2_124m_base'
+        modelpath1='Transformers-tokenizer-gpt2'
         cortex_base2="models"
-        modelpath2='gpt2_124m_base'
+        modelpath2='onnx-quant-124M-base'
         s3bucket='deranged-parrot-models'
 
         #creating client and getting list of objects
@@ -87,10 +89,11 @@ class PythonPredictor:
         s3_download(cortex_base1, modelpath1, s3bucket, s3)
         s3_download(cortex_base2, modelpath2, s3bucket, s3)
 
+        #for transformers select folder located in
         self.tokenizer = GPT2Tokenizer.from_pretrained(os.path.join(cortex_base1, modelpath1)).to(self.device)
 
-        self.model1 = #(\
-        os.path.join(cortex_base1, modelpath1), use_cache=True)
+        #for inference session have to select the model file
+        self.model1 = rt.InferenceSession(os.path.join(cortex_base2, modelpath2, modelpath2+".onnx"))
 
         # if using torch model then uncomment this and 1 other spot
         #self.model1 = GPT2LMHeadModel.from_pretrained(\
