@@ -79,7 +79,7 @@ class PythonPredictor:
         cortex_base1="tokenizer"
         modelpath1='Transformers-tokenizer-gpt2'
         cortex_base2="models"
-        modelpath2='onnx-quant-124M-base'
+        modelpath2='onnx-quant-774M-Pulitzer-30ksteps'
         s3bucket='deranged-parrot-models'
 
         #creating client and getting list of objects
@@ -90,7 +90,7 @@ class PythonPredictor:
         s3_download(cortex_base2, modelpath2, s3bucket, s3)
 
         #for transformers select folder located in
-        self.tokenizer = GPT2Tokenizer.from_pretrained(os.path.join(cortex_base1, modelpath1)).to(self.device)
+        self.tokenizer = GPT2Tokenizer.from_pretrained(os.path.join(cortex_base1, modelpath1))
 
         #for inference session have to select the model file
         self.model1 = rt.InferenceSession(os.path.join(cortex_base2, modelpath2, modelpath2+".onnx"))
